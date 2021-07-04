@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public class PaymentSuccessedEvent
+    public class PaymentCompletedEvent
     {
         public int orderId { get; set; }
 
