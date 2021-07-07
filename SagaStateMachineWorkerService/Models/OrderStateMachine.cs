@@ -14,14 +14,22 @@ namespace SagaStateMachineWorkerService.Models
     {
         public Event<IOrderCreatedRequestEvent> OrderCreatedRequestEvent { get; set; }
         public Event<IStockReservedEvent> StockReservedEvent { get; set; }
+
+        public Event<IPaymentCompletedEvent> PaymentCompletedEvent { get; set; }
         public State OrderCreated { get; private set; }
         public State StockReserved { get; private set; }
+
+        public State PaymentCompleted { get; private set; }
 
         public OrderStateMachine()
         {
             InstanceState(x => x.CurrentState);
 
             Event(() => OrderCreatedRequestEvent, y => y.CorrelateBy<int>(x => x.OrderId, z => z.Message.OrderId).SelectId(context => Guid.NewGuid()));
+
+            Event(() => StockReservedEvent, x => x.CorrelateById(y => y.Message.CorrelationId));
+
+            Event(() => PaymentCompletedEvent, x => x.CorrelateById(y => y.Message.CorrelationId));
 
             Initially(
              When(OrderCreatedRequestEvent)
@@ -59,6 +67,8 @@ namespace SagaStateMachineWorkerService.Models
                     },
                     BuyerId = context.Instance.BuyerId
                 }).Then(context => { Console.WriteLine($"StockReservedEvent After : {context.Instance}"); }));
+
+            During(StockReserved, When(PaymentCompletedEvent).TransitionTo(PaymentCompleted).Publish(context => new OrderRequestCompletedEvent() { OrderId = context.Instance.OrderId }).Then(context => { Console.WriteLine($"PaymentCompletedEvent After : {context.Instance}"); }).Finalize());
         }
     }
 }

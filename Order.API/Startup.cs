@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
+using Order.API.Consumers;
 using Order.API.Models;
 using Shared;
 using System;
@@ -33,9 +33,16 @@ namespace Order.API
         {
             services.AddMassTransit(x =>
             {
+                x.AddConsumer<OrderRequestCompletedEventConsumer>();
+
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(Configuration.GetConnectionString("RabbitMQ"));
+
+                    cfg.ReceiveEndpoint(RabbitMQSettingsConst.OrderRequestCompletedEventtQueueName, x =>
+                    {
+                        x.ConfigureConsumer<OrderRequestCompletedEventConsumer>(context);
+                    });
                 });
             });
 
