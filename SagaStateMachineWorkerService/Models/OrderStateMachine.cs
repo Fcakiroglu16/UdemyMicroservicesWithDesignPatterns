@@ -56,7 +56,8 @@ namespace SagaStateMachineWorkerService.Models
                         CVV = context.Instance.CVV,
                         Expiration = context.Instance.Expiration,
                         TotalPrice = context.Instance.TotalPrice
-                    }
+                    },
+                    BuyerId = context.Instance.BuyerId
                 }).Then(context => { Console.WriteLine($"StockReservedEvent After : {context.Instance}"); }));
         }
     }
