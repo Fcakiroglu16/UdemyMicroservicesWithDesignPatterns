@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Shared;
+using Stock.API.Consumers;
 using Stock.API.Models;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,16 @@ namespace Stock.API
         {
             services.AddMassTransit(x =>
             {
+                x.AddConsumer<OrderCreatedEventConsumer>();
+
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(Configuration.GetConnectionString("RabbitMQ"));
+
+                    cfg.ReceiveEndpoint(RabbitMQSettingsConst.StockOrderCreatedEventQueueName, e =>
+                     {
+                         e.ConfigureConsumer<OrderCreatedEventConsumer>(context);
+                     });
                 });
             });
 

@@ -1,4 +1,5 @@
 ﻿using Automatonymous;
+using Shared;
 using Shared.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,9 @@ namespace SagaStateMachineWorkerService.Models
 
             Event(() => OrderCreatedRequestEvent, y => y.CorrelateBy<int>(x => x.OrderId, z => z.Message.OrderId).SelectId(context => Guid.NewGuid()));
 
-            Initially(When(OrderCreatedRequestEvent).Then(context =>
+            Initially(
+             When(OrderCreatedRequestEvent)
+             .Then(context =>
             {
                 context.Instance.BuyerId = context.Data.BuyerId;
 
@@ -32,7 +35,11 @@ namespace SagaStateMachineWorkerService.Models
                 context.Instance.CVV = context.Data.Payment.CVV;
                 context.Instance.Expiration = context.Data.Payment.Expiration;
                 context.Instance.TotalPrice = context.Data.Payment.TotalPrice;
-            }).Then(context => { Console.WriteLine($"OrderCreatedRequestEvent before : {context.Instance}"); }).TransitionTo(OrderCreated).Then(context => { Console.WriteLine($"OrderCreatedRequestEvent After : {context.Instance}"); }));
+            })
+            .Then(context => { Console.WriteLine($"OrderCreatedRequestEvent before : {context.Instance}"); })
+            .Publish(context => new OrderCreatedEvent(context.Instance.CorrelationId) { OrderItems = context.Data.OrderItems })
+            .TransitionTo(OrderCreated)
+            .Then(context => { Console.WriteLine($"OrderCreatedRequestEvent After : {context.Instance}"); }));
         }
     }
 }
