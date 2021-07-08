@@ -34,6 +34,7 @@ namespace Order.API
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<OrderRequestCompletedEventConsumer>();
+                x.AddConsumer<OrderRequestFailedEventConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -42,6 +43,11 @@ namespace Order.API
                     cfg.ReceiveEndpoint(RabbitMQSettingsConst.OrderRequestCompletedEventtQueueName, x =>
                     {
                         x.ConfigureConsumer<OrderRequestCompletedEventConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint(RabbitMQSettingsConst.OrderRequestFailedEventtQueueName, x =>
+                    {
+                        x.ConfigureConsumer<OrderRequestFailedEventConsumer>(context);
                     });
                 });
             });

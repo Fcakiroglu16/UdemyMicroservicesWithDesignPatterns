@@ -11,7 +11,7 @@ namespace Shared
     {
         public StockNotReservedEvent(Guid correlationId)
         {
-            correlationId = CorrelationId;
+            CorrelationId = correlationId;
         }
 
         public string Reason { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Interfaces
 {
-    internal interface IStockNotReservedEvent : CorrelatedBy<Guid>
+    public interface IStockNotReservedEvent : CorrelatedBy<Guid>
     {
         string Reason { get; set; }
     }
