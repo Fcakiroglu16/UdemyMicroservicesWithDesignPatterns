@@ -35,6 +35,8 @@ namespace Stock.API
             {
                 x.AddConsumer<OrderCreatedEventConsumer>();
 
+                x.AddConsumer<StockRollBackMessageConsumer>();
+
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(Configuration.GetConnectionString("RabbitMQ"));
@@ -43,6 +45,11 @@ namespace Stock.API
                      {
                          e.ConfigureConsumer<OrderCreatedEventConsumer>(context);
                      });
+
+                    cfg.ReceiveEndpoint(RabbitMQSettingsConst.StockRollBackMessageQueueName, e =>
+                    {
+                        e.ConfigureConsumer<StockRollBackMessageConsumer>(context);
+                    });
                 });
             });
 
