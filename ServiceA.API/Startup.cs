@@ -40,7 +40,35 @@ namespace ServiceA.API
             services.AddHttpClient<ProductService>(opt =>
             {
                 opt.BaseAddress = new Uri("https://localhost:5003/api/products/");
-            }).AddPolicyHandler(GetRetryPolicy());
+            }).AddPolicyHandler(GetAdvanceCircuitBreakerPolicy());
+        }
+
+        private IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions.HandleTransientHttpError().CircuitBreakerAsync(3, TimeSpan.FromSeconds(10), onBreak: (arg1, arg2) =>
+            {
+                Debug.WriteLine("Circuit Breaker Status => On Break");
+            }, onReset: () =>
+            {
+                Debug.WriteLine("Circuit Breaker Status => On Reset");
+            }, onHalfOpen: () =>
+            {
+                Debug.WriteLine("Circuit Breaker Status => On Half Open");
+            });
+        }
+
+        private IAsyncPolicy<HttpResponseMessage> GetAdvanceCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions.HandleTransientHttpError().AdvancedCircuitBreakerAsync(0.5, TimeSpan.FromSeconds(30), 30, TimeSpan.FromSeconds(30), onBreak: (arg1, arg2) =>
+               {
+                   Debug.WriteLine("Circuit Breaker Status => On Break");
+               }, onReset: () =>
+               {
+                   Debug.WriteLine("Circuit Breaker Status => On Reset");
+               }, onHalfOpen: () =>
+               {
+                   Debug.WriteLine("Circuit Breaker Status => On Half Open");
+               });
         }
 
         private IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
