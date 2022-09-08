@@ -57,7 +57,7 @@ namespace Order.API
                 options.UseSqlServer(Configuration.GetConnectionString("SqlCon"));
             });
 
-            services.AddMassTransitHostedService();
+           // services.AddMassTransitHostedService();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>

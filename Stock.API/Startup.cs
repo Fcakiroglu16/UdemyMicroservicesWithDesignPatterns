@@ -53,7 +53,7 @@ namespace Stock.API
                 });
             });
 
-            services.AddMassTransitHostedService();
+           
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseInMemoryDatabase("StockDb");

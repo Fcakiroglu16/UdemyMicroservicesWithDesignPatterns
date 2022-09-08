@@ -1,22 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>dotnet-SagaStateMachineWorkerService-03E499EC-2C0A-44DB-8974-9F6E6785533C</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.AspNetCore" Version="7.2.1" />
-    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="7.2.1" />
-    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.2.1" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="7.2.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.0.6" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>

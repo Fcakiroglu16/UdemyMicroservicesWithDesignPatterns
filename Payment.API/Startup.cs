@@ -44,7 +44,7 @@ namespace Payment.API
                 });
             });
 
-            services.AddMassTransitHostedService();
+           // services.AddMassTransitHostedService();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

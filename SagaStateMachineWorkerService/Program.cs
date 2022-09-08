@@ -26,6 +26,8 @@ namespace SagaStateMachineWorkerService
                 {
                     services.AddMassTransit(cfg =>
                     {
+                     
+
                         cfg.AddSagaStateMachine<OrderStateMachine, OrderStateInstance>().EntityFrameworkRepository(opt =>
                         {
                             opt.AddDbContext<DbContext, OrderStateDbContext>((provider, builder) =>
@@ -47,7 +49,7 @@ namespace SagaStateMachineWorkerService
                              });
                          }));
                     });
-                    services.AddMassTransitHostedService();
+                   // services.AddMassTransitHostedService();
                     services.AddHostedService<Worker>();
                 });
     }
