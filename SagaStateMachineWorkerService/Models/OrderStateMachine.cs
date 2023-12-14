@@ -14,6 +14,7 @@ namespace SagaStateMachineWorkerService.Models
 {
     public class OrderStateMachine : MassTransit.MassTransitStateMachine<OrderStateInstance>
     {
+
         public Event<IOrderCreatedRequestEvent> OrderCreatedRequestEvent { get; set; }
         public Event<IStockReservedEvent> StockReservedEvent { get; set; }
         public Event<IStockNotReservedEvent> StockNotReservedEvent { get; set; }
@@ -38,6 +39,7 @@ namespace SagaStateMachineWorkerService.Models
             Event(() => StockNotReservedEvent, x => x.CorrelateById(y => y.Message.CorrelationId));
 
             Event(() => PaymentCompletedEvent, x => x.CorrelateById(y => y.Message.CorrelationId));
+            Event(() => PaymentFailedEvent, x => x.CorrelateById(y => y.Message.CorrelationId));
 
             Initially(
              When(OrderCreatedRequestEvent)
@@ -60,6 +62,7 @@ namespace SagaStateMachineWorkerService.Models
             .Publish(context => new OrderCreatedEvent(context.Saga.CorrelationId) { OrderItems = context.Message.OrderItems })
             .TransitionTo(OrderCreated)
             .Then(context => { Console.WriteLine($"OrderCreatedRequestEvent After : {context.Saga}"); }));
+
 
             During(OrderCreated,
                 When(StockReservedEvent)
@@ -91,7 +94,7 @@ namespace SagaStateMachineWorkerService.Models
 
                 );
 
-            SetCompletedWhenFinalized();
+           // SetCompletedWhenFinalized();
         }
     }
 }

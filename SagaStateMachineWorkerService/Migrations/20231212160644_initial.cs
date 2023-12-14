@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace SagaStateMachineWorkerService.Migrations
 {
     public partial class initial : Migration
